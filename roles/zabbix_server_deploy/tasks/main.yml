@@ -1,13 +1,16 @@
 ---
 
-- name: Include Zabbix Repo Deployment role
+- name: Include Zabbix Repo deployment role
   ansible.builtin.include_role:
     name: acropia.deploy.zabbix_repo_deploy
 
-- name: Include Remi Repo Deployment role
+- name: Include Remi Repo deployment role
   ansible.builtin.include_role:
     name: acropia.deploy.remi_repo_deploy
 
+- name: Include Certbot deployment role
+  ansible.builtin.include_role:
+    name: acropia.deploy.certbot_deploy
 
 
 - name: Install PHP 8.1 from Remi stream

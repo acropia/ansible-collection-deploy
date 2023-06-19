@@ -1,0 +1,25 @@
+---
+- name: Install snapd
+  ansible.builtin.dnf:
+    name: snapd
+    state: present
+
+- name: Enable and start snapd socket
+  ansible.builtin.systemd:
+    name: snapd.socket
+    enabled: yes
+    state: started
+
+- name: Create symlink for classic snaps
+  ansible.builtin.file:
+    src: /var/lib/snapd/snap
+    dest: /snap
+    owner: root
+    group: root
+    state: link
+
+- name: Install snap core
+  ansible.builtin.command: snap install core
+
+- name: Refresh snap core
+  ansible.builtin.command: snap refresh core
