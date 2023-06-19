@@ -1,0 +1,19 @@
+---
+- name: Install Remi Repo GPG keys
+  ansible.builtin.rpm_key:
+    state: present
+    key: "{{ item }}"
+  loop:
+    - https://rpms.remirepo.net/RPM-GPG-KEY-remi2023
+    - https://rpms.remirepo.net/RPM-GPG-KEY-remi2022
+    - https://rpms.remirepo.net/RPM-GPG-KEY-remi2021
+    - https://rpms.remirepo.net/RPM-GPG-KEY-remi2020
+    - https://rpms.remirepo.net/RPM-GPG-KEY-remi2019
+    - https://rpms.remirepo.net/RPM-GPG-KEY-remi2018
+    - https://rpms.remirepo.net/RPM-GPG-KEY-remi2017
+    - https://rpms.remirepo.net/RPM-GPG-KEY-remi
+
+- name: Install Remi yum repository
+  ansible.builtin.dnf:
+    name: https://rpms.remirepo.net/enterprise/remi-release-9.rpm
+    state: present
