@@ -8,6 +8,8 @@
   ansible.builtin.include_role:
     name: acropia.deploy.remi_repo_deploy
 
+
+
 - name: Install PHP 8.1 from Remi stream
   ansible.builtin.dnf:
     name: "@php:remi-8.1"
@@ -32,3 +34,102 @@
   ansible.builtin.dnf:
     name: "php-mysqlnd"
     state: present
+
+
+
+- name: Set SELinux boolean httpd_can_connect_zabbix
+  ansible.posix.seboolean:
+    name: httpd_can_connect_zabbix
+    state: true
+    persistent: true
+
+- name: Set SELinux boolean httpd_can_network_connect_db
+  ansible.posix.seboolean:
+    name: httpd_can_network_connect_db
+    state: true
+    persistent: true
+
+
+- name: Remove default autoindex.conf
+  ansible.builtin.file:
+    path: /etc/httpd/conf.d/autoindex.conf
+    state: absent
+
+- name: Remove default welcome.conf
+  ansible.builtin.file:
+    path: /etc/httpd/conf.d/welcome.conf
+    state: absent
+
+- name: Restart Apache HTTPD
+  ansible.builtin.systemd:
+    name: httpd
+    state: restarted
+
+- name: Install Zabbix Server with MySQL backend
+  ansible.builtin.dnf:
+    name: zabbix-server-mysql
+    state: present
+
+- name: Install Zabbix Web with MySQL backend
+  ansible.builtin.dnf:
+    name: zabbix-web-mysql
+    state: present
+
+- name: Install Zabbix Apache config
+  ansible.builtin.dnf:
+    name: zabbix-apache-conf
+    state: present
+
+- name: Install Zabbix Server SQL scripts
+  ansible.builtin.dnf:
+    name: zabbix-sql-scripts
+    state: present
+
+- name: Install Zabbix SELinux policy
+  ansible.builtin.dnf:
+    name: zabbix-selinux-policy
+    state: present
+
+- name: Install Zabbix Agent
+  ansible.builtin.dnf:
+    name: zabbix-agent
+    state: present
+
+- name: Create MariaDB database for Zabbix
+  community.mysql.mysql_db:
+    name: zabbix
+    collation: utf8mb4_bin
+    encoding: utf8mb4
+    state: present
+
+- name: Create MariaDB user for Zabbix
+  community.mysql.mysql_user:
+    name: zabbix
+    password: "{{ zabbix_server_database_password }}"
+    priv: 'zabbix.*:ALL'
+    state: present
+
+- name: Temporarily set MariaDB global var
+  community.mysql.mysql_variables:
+    variable: log_bin_trust_function_creators
+    value: 1
+    mode: global
+
+- name: Import Zabbix database scheme
+  community.mysql.mysql_db:
+    name: zabbix
+    state: import
+    target: /usr/share/zabbix-sql-scripts/mysql/server.sql.gz
+
+- name: Restore MariaDB global var log_bin_trust_function_creators
+  community.mysql.mysql_variables:
+    variable: log_bin_trust_function_creators
+    value: 0
+    mode: global
+
+- name: Configure Zabbix database password in Zabbix Server config
+  ansible.builtin.lineinfile:
+    path: /etc/zabbix/zabbix_server.conf
+    firstmatch: true
+    insertafter: "^# DBPassword"
+    line: "DBPassword={{ zabbix_server_database_password }}"
