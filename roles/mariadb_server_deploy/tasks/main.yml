@@ -1,0 +1,56 @@
+---
+- name: Include requirement tasks
+  ansible.builtin.include_tasks: requirements.yml
+
+
+- name: Add official MariaDB repository
+  ansible.builtin.yum_repository:
+    name: MariaDB
+    description: MariaDB YUM repo
+    file: MariaDB
+    baseurl: https://ftp.nluug.nl/db/mariadb/yum/10.6/centos/$releasever/$basearch
+    gpgkey: https://ftp.nluug.nl/db/mariadb/yum/RPM-GPG-KEY-MariaDB
+    gpgcheck: true
+
+- name: Install MariaDB Server
+  ansible.builtin.dnf:
+    name: MariaDB-server
+    state: present
+
+- name: Install MariaDB Client
+  ansible.builtin.dnf:
+    name: MariaDB-client
+    state: present
+
+- name: Enable and start mariadb service
+  ansible.builtin.systemd:
+    name: mariadb
+    enabled: true
+    state: started
+
+- name: Install Python PyMySQL client library
+  ansible.builtin.dnf:
+    name: python3-PyMySQL
+    state: present
+
+
+- name: Configure MariaDB root user
+  community.mysql.mysql_user:
+    #//login_host: localhost
+    login_user: root
+    login_password:
+    login_unix_socket: /var/lib/mysql/mysql.sock
+    name: root
+    password: "{{ mariadb_root_password }}"
+    state: present
+
+- name: Write MariaDB root login credentials to root my.cnf
+  ansible.builtin.copy:
+    dest: /root/.my.cnf
+    owner: root
+    group: root
+    mode: 0600
+    content: |
+        [client]
+        user=root
+        password={{ mariadb_root_password }}

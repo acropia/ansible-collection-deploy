@@ -1,0 +1,10 @@
+---
+- name: Check required var ansible_fqdn
+  ansible.builtin.fail:
+    msg: Required var ansible_fqdn is not defined
+  when: (ansible_fqdn is not defined) or (ansible_fqdn | length == 0)
+
+- name: Check required var mariadb_root_password
+  ansible.builtin.fail:
+    msg: Required var mariadb_root_password is not defined
+  when: (mariadb_root_password is not defined) or (mariadb_root_password | length == 0)

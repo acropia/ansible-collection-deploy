@@ -1,0 +1,7 @@
+---
+# defaults file for acropia.mariadb
+
+# MariaDB root password
+#
+# Root password which will be set on the root account in MariaDB
+mariadb_root_password: ''
