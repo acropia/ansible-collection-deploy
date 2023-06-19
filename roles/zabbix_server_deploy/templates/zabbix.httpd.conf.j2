@@ -1,0 +1,48 @@
+<VirtualHost *:80>
+    ServerName {{ zabbix_server_vhost }}
+    ServerAlias {{ zabbix_server_vhost_alias }}
+
+    RewriteEngine on
+    RewriteCond %{SERVER_NAME} ={{ zabbix_server_vhost }}
+    RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
+</VirtualHost>
+<VirtualHost *:443>
+    ServerName {{ zabbix_server_vhost }}
+    ServerAlias {{ zabbix_server_vhost_alias }}
+
+    DocumentRoot /usr/share/zabbix
+    <Directory "/usr/share/zabbix">
+        Options FollowSymLinks
+        AllowOverride None
+        Require all granted
+    </Directory>
+
+    <FilesMatch \.(php|phar)$>
+        SetHandler proxy:unix:/run/php-fpm/zabbix.sock|fcgi://localhost
+    </FilesMatch>
+
+    Include /etc/letsencrypt/options-ssl-apache.conf
+    SSLCertificateFile /etc/letsencrypt/live/{{ zabbix_server_vhost }}/cert.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/{{ zabbix_server_vhost }}/privkey.pem
+    SSLCertificateChainFile /etc/letsencrypt/live/{{ zabbix_server_vhost }}/chain.pem
+</VirtualHost>
+
+<Directory "/usr/share/zabbix/conf">
+    Require all denied
+</Directory>
+
+<Directory "/usr/share/zabbix/app">
+    Require all denied
+</Directory>
+
+<Directory "/usr/share/zabbix/include">
+    Require all denied
+</Directory>
+
+<Directory "/usr/share/zabbix/local">
+    Require all denied
+</Directory>
+
+<Directory "/usr/share/zabbix/vendor">
+    Require all denied
+</Directory>

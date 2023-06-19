@@ -133,3 +133,11 @@
     firstmatch: true
     insertafter: "^# DBPassword"
     line: "DBPassword={{ zabbix_server_database_password }}"
+
+- name: Template Apache vhost config for Zabbix
+  ansible.builtin.template:
+    src: zabbix.httpd.conf.j2
+    dest: /etc/httpd/conf.d/{{ zabbix_server_vhost }}
+    owner: root
+    group: root
+    mode: 0640
