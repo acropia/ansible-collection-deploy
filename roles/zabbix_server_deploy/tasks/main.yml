@@ -1,0 +1,6 @@
+---
+
+- name: Include Zabbix Repo Deployment role
+  ansible.builtin.include_role:
+    name: acropia.deploy.zabbix_repo_deploy
+
