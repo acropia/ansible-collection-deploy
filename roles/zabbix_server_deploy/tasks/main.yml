@@ -4,3 +4,31 @@
   ansible.builtin.include_role:
     name: acropia.deploy.zabbix_repo_deploy
 
+- name: Include Remi Repo Deployment role
+  ansible.builtin.include_role:
+    name: acropia.deploy.remi_repo_deploy
+
+- name: Install PHP 8.1 from Remi stream
+  ansible.builtin.dnf:
+    name: "@php:remi-8.1"
+    state: present
+
+- name: Install PHP 8.1 extension bcmath from Remi stream
+  ansible.builtin.dnf:
+    name: "php-bcmath"
+    state: present
+
+- name: Install PHP 8.1 extension gd from Remi stream
+  ansible.builtin.dnf:
+    name: "php-gd"
+    state: present
+
+- name: Install PHP 8.1 extension mbstring from Remi stream
+  ansible.builtin.dnf:
+    name: "php-mbstring"
+    state: present
+
+- name: Install PHP 8.1 extension mysqlnd from Remi stream
+  ansible.builtin.dnf:
+    name: "php-mysqlnd"
+    state: present
