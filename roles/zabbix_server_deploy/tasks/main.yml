@@ -109,23 +109,31 @@
     priv: 'zabbix.*:ALL'
     state: present
 
-- name: Temporarily set MariaDB global var
-  community.mysql.mysql_variables:
-    variable: log_bin_trust_function_creators
-    value: 1
-    mode: global
+- name: Check if Zabbix tables already exist
+  ansible.builtin.stat:
+    path: /var/lib/mysql/zabbix/alerts.ibd
+  register: result_zabbix_table_alerts
 
-- name: Import Zabbix database scheme
-  community.mysql.mysql_db:
-    name: zabbix
-    state: import
-    target: /usr/share/zabbix-sql-scripts/mysql/server.sql.gz
+- name: Import Zabbix database schema
+  block:
+    - name: Temporarily set MariaDB global var
+      community.mysql.mysql_variables:
+        variable: log_bin_trust_function_creators
+        value: 1
+        mode: global
 
-- name: Restore MariaDB global var log_bin_trust_function_creators
-  community.mysql.mysql_variables:
-    variable: log_bin_trust_function_creators
-    value: 0
-    mode: global
+    - name: Import Zabbix database scheme
+      community.mysql.mysql_db:
+        name: zabbix
+        state: import
+        target: /usr/share/zabbix-sql-scripts/mysql/server.sql.gz
+
+    - name: Restore MariaDB global var log_bin_trust_function_creators
+      community.mysql.mysql_variables:
+        variable: log_bin_trust_function_creators
+        value: 0
+        mode: global
+  when: not result_zabbix_table_alerts.stat.exists
 
 - name: Configure Zabbix database password in Zabbix Server config
   ansible.builtin.lineinfile:
