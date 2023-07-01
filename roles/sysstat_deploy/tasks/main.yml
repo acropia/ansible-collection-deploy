@@ -1,0 +1,11 @@
+---
+- name: Install sysstat
+  ansible.builtin.dnf:
+    name: sysstat
+    state: present
+
+- name: Enable and start sysstat service
+  ansible.builtin.systemd:
+    name: sysstat
+    enabled: yes
+    state: started
