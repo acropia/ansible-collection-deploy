@@ -15,8 +15,8 @@
     state: true
     persistent: true
 
-- name: Enable and start freshclam
+- name: Enable and start clamav-freshclam
   ansible.builtin.systemd:
-    name: freshclam
+    name: clamav-freshclam
     enabled: true
     state: started
