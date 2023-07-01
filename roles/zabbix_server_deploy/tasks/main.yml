@@ -148,7 +148,19 @@
 - name: Template Apache vhost config for Zabbix
   ansible.builtin.template:
     src: zabbix.httpd.conf.j2
-    dest: /etc/httpd/conf.d/{{ zabbix_server_vhost }}
+    dest: /etc/httpd/conf.d/{{ zabbix_server_vhost }}.conf
     owner: root
     group: root
     mode: 0640
+
+- name: Enable and start Zabbix Agent
+  ansible.builtin.systemd:
+    name: zabbix-agent
+    enabled: true
+    state: started
+
+- name: Enable and start Zabbix Server
+  ansible.builtin.systemd:
+    name: zabbix-server
+    enabled: true
+    state: started
