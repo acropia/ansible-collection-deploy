@@ -1,0 +1,22 @@
+---
+- name: Install clamav
+  ansible.builtin.dnf:
+    name: clamav
+    state: present
+
+- name: Install clamav-update
+  ansible.builtin.dnf:
+    name: clamav-update
+    state: present
+
+- name: Set SELinux boolean antivirus_can_scan_system
+  ansible.posix.seboolean:
+    name: antivirus_can_scan_system
+    state: true
+    persistent: true
+
+- name: Enable and start freshclam
+  ansible.builtin.systemd:
+    name: freshclam
+    enabled: true
+    state: started
