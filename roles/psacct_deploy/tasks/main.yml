@@ -1,0 +1,11 @@
+---
+- name: Install psacct
+  ansible.builtin.dnf:
+    name: psacct
+    state: present
+
+- name: Enable and start psacct service
+  ansible.builtin.systemd:
+    name: psacct
+    enabled: yes
+    state: started
