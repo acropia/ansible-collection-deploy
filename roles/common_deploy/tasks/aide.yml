@@ -1,5 +1,5 @@
 ---
-- name: Install Advaned Intrusion Detection Environment (AIDE)
+- name: Install Advanced Intrusion Detection Environment (AIDE)
   ansible.builtin.package:
     name: aide
     state: present

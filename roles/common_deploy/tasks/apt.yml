@@ -1,0 +1,5 @@
+---
+- name: Install apt-transport-https (HTTPS support for APT)
+  ansible.builtin.package:
+    name: apt-transport-https
+    state: present

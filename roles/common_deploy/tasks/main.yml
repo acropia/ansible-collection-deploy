@@ -9,11 +9,14 @@
     - "{{ ansible_os_family }}-{{ ansible_distribution_major_version}}.yml"
     - "{{ ansible_os_family }}"
 
-- import_tasks: atop.yml
-
 - import_tasks: aide.yml
 
+- import_tasks: apt.yml
+  when: ansible_facts['os_family'] == "Ubuntu"
+
 - import_tasks: arpwatch.yml
+
+- import_tasks: atop.yml
 
 # Needs to be changed to be Ununtu compatible
 # - import_tasks: bash.yml
