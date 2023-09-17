@@ -1,0 +1,8 @@
+---
+- name: Add modprobe blocklist
+  ansible.builtin.copy:
+    src: 'modprobe/blocklist.conf'
+    dest: '/etc/modprobe.d/blocklist.conf'
+    owner: root
+    group: root
+    mode: 0644

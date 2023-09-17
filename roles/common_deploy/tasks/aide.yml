@@ -1,0 +1,25 @@
+---
+- name: Install Advaned Intrusion Detection Environment (AIDE)
+  ansible.builtin.package:
+    name: aide
+    state: present
+
+- name: Check if AIDE database exists
+  ansible.builtin.stat:
+    path: /var/lib/aide/aide.db.gz
+  register: aide_db
+
+- name: Initialize AIDE database
+  ansible.builtin.command: "{{ common_deploy_aide_executable_path }} --init"
+  when: not aide_db.stat.exists
+
+- name: Move new database to default location
+  ansible.builtin.command: mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+  when: not aide_db.stat.exists
+
+- name: Cron AIDE Check
+  ansible.builtin.cron:
+    name: "AIDE check"
+    minute: "0"
+    hour: "6"
+    job: "/usr/sbin/aide --check"

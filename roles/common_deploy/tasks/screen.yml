@@ -1,0 +1,5 @@
+---
+- name: Install screen
+  ansible.builtin.package:
+    name: screen
+    state: present

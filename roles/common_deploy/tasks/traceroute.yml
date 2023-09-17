@@ -1,0 +1,5 @@
+---
+- name: Install traceroute
+  ansible.builtin.package:
+    name: traceroute
+    state: present

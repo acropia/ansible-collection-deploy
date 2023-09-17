@@ -1,0 +1,8 @@
+---
+- name: Configure systemd Core Dump
+  ansible.builtin.copy:
+    src: systemd/coredump.conf
+    dest: /etc/systemd/coredump.conf
+    owner: root
+    group: root
+    mode: 0644

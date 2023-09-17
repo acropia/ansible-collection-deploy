@@ -1,0 +1,16 @@
+---
+- name: Replace bashrc with template
+  ansible.builtin.template:
+    src: 'bash/bashrc.j2'
+    dest: '/etc/bashrc'
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Replace profile with template
+  ansible.builtin.template:
+    src: 'bash/profile.j2'
+    dest: '/etc/profile'
+    owner: root
+    group: root
+    mode: 0644

@@ -1,0 +1,41 @@
+# chrony.conf - chronyd configuration file
+# Official documentation:
+#   https://chrony.tuxfamily.org/doc/3.5/chrony.conf.html
+
+# The server directive specifies an NTP server which can be used as a time
+# source. The client-server relationship is strictly hierarchical: a client
+# might synchronise its system time to that of the server, but the server’s
+# system time will never be influenced by that of a client.
+{% for item in common_chrony_server_hostnames %}
+pool {{ item }} iburst
+{% endfor %}
+
+# One of the main activities of the chronyd program is to work out the rate at
+# which the system clock gains or loses time relative to real time.
+# Whenever chronyd computes a new value of the gain or loss rate, it is
+# desirable to record it somewhere. This allows chronyd to begin compensating
+# the system clock at that rate whenever it is restarted, even before it has had
+# a chance to obtain an equally good estimate of the rate during the new run.
+# (This process can take many minutes, at least.)# Record the rate at which the
+# system clock gains/losses time.
+driftfile /var/lib/chrony/drift
+
+# Normally chronyd will cause the system to gradually correct any time offset,
+# by slowing down or speeding up the clock as required. In certain situations,
+# the system clock might be so far adrift that this slewing process would take a
+# very long time to correct the system clock.
+# This directive forces chronyd to step the system clock if the adjustment is
+# larger than a threshold value, but only if there were no more clock updates
+# since chronyd was started than a specified limit (a negative value can be used
+# to disable the limit).
+makestep 1.0 3
+
+# The rtcsync directive enables a mode where the system time is periodically
+# copied to the RTC and chronyd does not try to track its drift. This directive
+# cannot be used with the rtcfile directive.
+# On Linux, the RTC copy is performed by the kernel every 11 minutes.
+rtcsync
+
+# This directive allows the directory where log files are written to be
+# specified.
+logdir /var/log/chrony

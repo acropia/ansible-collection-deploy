@@ -1,0 +1,69 @@
+---
+# tasks file for ansible-role-common
+
+- name: Include OS-specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}-{{ ansible_distribution_major_version}}.yml"
+    - "{{ ansible_distribution }}"
+    - "{{ ansible_os_family }}-{{ ansible_distribution_major_version}}.yml"
+    - "{{ ansible_os_family }}"
+
+- import_tasks: atop.yml
+
+- import_tasks: aide.yml
+
+- import_tasks: arpwatch.yml
+
+# Needs to be changed to be Ununtu compatible
+# - import_tasks: bash.yml
+
+- import_tasks: bind_utils.yml
+  when: ansible_facts['os_family'] == "RedHat"
+
+# - import_tasks: csh.yml
+
+# Needs further investigation on multiple OS-es
+# - import_tasks: chrony.yml
+
+- import_tasks: epel.yml
+  when: ansible_facts['os_family'] == "RedHat"
+
+- import_tasks: htop.yml
+
+- import_tasks: iftop.yml
+
+- import_tasks: git.yml
+
+# Needs further investigation on multiple OS-es
+#- import_tasks: kernel.yml
+
+- import_tasks: lynis.yml
+
+- import_tasks: modprobe.yml
+
+- import_tasks: ncdu.yml
+
+- import_tasks: net_tools.yml
+
+- import_tasks: pam.yml
+
+- import_tasks: screen.yml
+
+# Needs further investigation on multiple OS-es
+# - import_tasks: ssh.yml
+
+- import_tasks: strace.yml
+
+# Needs furtjer investigation on multiple OS-es
+# - import_tasks: systemd.yml
+
+- import_tasks: tcpdump.yml
+
+- import_tasks: telnet.yml
+
+- import_tasks: traceroute.yml
+
+- import_tasks: vim.yml
+
+- import_tasks: wget.yml

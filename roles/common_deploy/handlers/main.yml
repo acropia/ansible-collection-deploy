@@ -1,0 +1,8 @@
+---
+# handlers file for ansible-role-common
+
+- name: restart sshd
+  ansible.builtin.systemd:
+    name: sshd
+    state: restarted
+    daemon_reload: true

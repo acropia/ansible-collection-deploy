@@ -1,0 +1,5 @@
+---
+- name: Install atop
+  ansible.builtin.package:
+    name: atop
+    state: present

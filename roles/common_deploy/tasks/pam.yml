@@ -1,0 +1,8 @@
+---
+- name: Configure PAM security limits
+  ansible.builtin.copy:
+    src: pam/security/limits.conf
+    dest: /etc/security/limits.conf
+    owner: root
+    group: root
+    mode: 0644

@@ -7,7 +7,7 @@
 
 - name: Configure STIG ruleset
   ansible.builtin.copy:
-    src: /usr/share/audit/sample-rules//30-stig.rules
+    src: /usr/share/audit/sample-rules/30-stig.rules
     dest: /etc/audit/rules.d/30-stig.rules
     remote_src: true
 

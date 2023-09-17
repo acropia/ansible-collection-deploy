@@ -1,0 +1,8 @@
+---
+- name: Replace csh.cshrc with template
+  ansible.builtin.template:
+    src: 'csh/csh.cshrc.j2'
+    dest: '/etc/csh.cshrc'
+    owner: root
+    group: root
+    mode: 0644

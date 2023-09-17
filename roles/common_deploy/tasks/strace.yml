@@ -1,0 +1,5 @@
+---
+- name: Install strace
+  ansible.builtin.package:
+    name: strace
+    state: present

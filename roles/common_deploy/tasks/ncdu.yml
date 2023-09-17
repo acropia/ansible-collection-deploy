@@ -1,0 +1,5 @@
+---
+- name: Install ncdu
+  ansible.builtin.package:
+    name: ncdu
+    state: present
