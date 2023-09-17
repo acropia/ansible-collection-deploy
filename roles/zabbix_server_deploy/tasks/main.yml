@@ -38,8 +38,6 @@
     name: "php-mysqlnd"
     state: present
 
-
-
 - name: Set SELinux boolean httpd_can_connect_zabbix
   ansible.posix.seboolean:
     name: httpd_can_connect_zabbix
