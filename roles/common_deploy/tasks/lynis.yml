@@ -4,17 +4,12 @@
     - name: Get Cisofy APT repo key
       ansible.builtin.get_url:
         url: https://packages.cisofy.com/keys/cisofy-software-public.key
-        dest: /tmp/cisofygpg
+        dest: /etc/apt/trusted.gpg.d/cisofy-software-public.asc
         checksum: sha256:3e191aa8468f6a536dcdd09a7dd7aa44db523c0eac05206f5a30d7429d48bf5d
-
-    - name: De-Armor Cisofy GPG key
-      command:  gpg --dearmor < /tmp/cisofygpg > /etc/apt/trusted.gpg.d/cisofy-software-public.gpg
-      changed_when: false
-      no_log: true
 
     - name: Add Cisofy APT repo file
       ansible.builtin.apt_repository:
-        repo: deb [arch=amd64,arm64 signed-by=/etc/apt/trusted.gpg.d/cisofy-software-public.gpg] https://packages.cisofy.com/community/lynis/deb/ stable main
+        repo: deb [arch=amd64,arm64 signed-by=/etc/apt/trusted.gpg.d/cisofy-software-public.asc] https://packages.cisofy.com/community/lynis/deb/ stable main
         filename: cisofy-lynis
         state: present
   when: ansible_facts['os_family'] == "Debian"
