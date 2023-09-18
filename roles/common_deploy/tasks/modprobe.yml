@@ -5,7 +5,7 @@
     dest: /etc/modprobe.d/blocklist.conf
     owner: root
     group: root
-    mode: 0644
+    mode: '0644'
 
 - name: Disable freevxfs filesystem using modprobe
   ansible.builtin.copy:
@@ -13,4 +13,36 @@
     dest: /etc/modprobe.d/freevxfs.conf
     owner: root
     group: root
-    mode: 0644
+    mode: '0644'
+
+- name: Disable jffs2 filesystem using modprobe
+  ansible.builtin.copy:
+    src: modprobe/jffs2.conf
+    dest: /etc/modprobe.d/jffs2.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Disable hfs filesystem using modprobe
+  ansible.builtin.copy:
+    src: modprobe/hfs.conf
+    dest: /etc/modprobe.d/hfs.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Disable hfsplus filesystem using modprobe
+  ansible.builtin.copy:
+    src: modprobe/hfsplus.conf
+    dest: /etc/modprobe.d/hfsplus.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Disable udf filesystem using modprobe
+  ansible.builtin.copy:
+    src: modprobe/udf.conf
+    dest: /etc/modprobe.d/udf.conf
+    owner: root
+    group: root
+    mode: '0644'
