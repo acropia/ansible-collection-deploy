@@ -17,7 +17,7 @@
         repo: deb [arch=amd64,arm64 signed-by=/etc/apt/trusted.gpg.d/cisofy-software-public.gpg] https://packages.cisofy.com/community/lynis/deb/ stable main
         filename: cisofy-lynis
         state: present
-  when: ansible_facts['os_family'] == "Ubuntu"
+  when: ansible_facts['os_family'] == "Debian"
 
 - name: Install Lynis
   ansible.builtin.package:
