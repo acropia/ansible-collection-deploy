@@ -38,9 +38,6 @@
 
 - import_tasks: git.yml
 
-# Needs further investigation on multiple OS-es
-#- import_tasks: kernel.yml
-
 - import_tasks: lynis.yml
 
 - import_tasks: modprobe.yml
@@ -57,6 +54,9 @@
 # - import_tasks: ssh.yml
 
 - import_tasks: strace.yml
+
+# Needs further investigation on multiple OS-es
+#- import_tasks: sysctl.yml
 
 # Needs furtjer investigation on multiple OS-es
 # - import_tasks: systemd.yml
